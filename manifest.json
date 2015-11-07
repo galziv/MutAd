@@ -1,0 +1,13 @@
+{
+    "manifest_version": 2,
+
+    "name": "MutAd",
+    "version": "1.0",
+    "icon": "mute.png",
+    "content_scripts": [
+        {
+            "matches": [ "*://*.com/*" ],
+            "js": [ "mutAd.js" ]
+        }
+    ]
+}
