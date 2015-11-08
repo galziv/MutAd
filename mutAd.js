@@ -1,6 +1,9 @@
 (function (window, document) {
 
-    window.mutAd = {
+    "use strict";
+
+    var mutAd = {
+        interval: 100,
         nextAction: "findAd",
         currentUrl: null,
         wasMuted: null,
@@ -28,34 +31,34 @@
 
     setInterval(function () {
 
-        if (!window.mutAd.mutedText) {
-            var text1 = window.mutAd.getAriaText(), text2;
-            window.mutAd.muteToggle();
-            text2 = window.mutAd.getAriaText();
-            window.mutAd.muteToggle();
+        if (!mutAd.mutedText) {
+            var text1 = mutAd.getAriaText(), text2;
+            mutAd.muteToggle();
+            text2 = mutAd.getAriaText();
+            mutAd.muteToggle();
 
 
             if (!text1 || !text2) {
                 return;
             }
 
-            window.mutAd.mutedText = text1.length > text2.length ? text1 : text2;
-            console.log(window.mutAd.mutedText);
+            mutAd.mutedText = text1.length > text2.length ? text1 : text2;
+            console.log(mutAd.mutedText);
         }
 
-        switch (window.mutAd.nextAction) {
+        switch (mutAd.nextAction) {
             case "findAd":
-                var ad = window.mutAd.getAd();
+                var ad = mutAd.getAd();
 
                 if (ad) {
-                    window.mutAd.wasMuted = window.mutAd.getAriaText() == window.mutAd.mutedText;
-                    window.mutAd.currentUrl = window.location.href;
+                    mutAd.wasMuted = mutAd.getAriaText() == mutAd.mutedText;
+                    mutAd.currentUrl = window.location.href;
 
-                    if (!window.mutAd.wasMuted) {
-                        window.mutAd.muteToggle();
+                    if (!mutAd.wasMuted) {
+                        mutAd.muteToggle();
                     }
 
-                    window.mutAd.nextAction = "pressSkip";
+                    mutAd.nextAction = "pressSkip";
                 }
                 break;
             case "pressSkip":
@@ -63,30 +66,30 @@
 
                 if (skip) {
                     skip.click();
-                    window.mutAd.nextAction = "verifyNoAd";
-                } else if (!window.mutAd.getAd()) {
-                    window.mutAd.nextAction = "verifyNoAd";
+                    mutAd.nextAction = "verifyNoAd";
+                } else if (!mutAd.getAd()) {
+                    mutAd.nextAction = "verifyNoAd";
                 }
                 break;
             case "verifyNoAd":
                 if (!document.querySelector(".videoAdUiAttribution")) {
-                    window.mutAd.nextAction = "unmute";
+                    mutAd.nextAction = "unmute";
                 } else {
-                    window.mutAd.nextAction = "pressSkip";
+                    mutAd.nextAction = "pressSkip";
                 }
                 break;
             case "unmute":
                 var unmute = document.querySelector(".ytp-mute-button");
 
                 if (unmute) {
-                    if (!window.mutAd.wasMuted) {
-                        window.mutAd.muteToggle();
+                    if (!mutAd.wasMuted) {
+                        mutAd.muteToggle();
                     }
-                    window.mutAd.nextAction = "findAd";
+                    mutAd.nextAction = "findAd";
                 }
 
                 break;
         }
 
-    }, 100);
+    }.bind(this), mutAd.interval);
 }(window, document));

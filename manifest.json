@@ -3,10 +3,12 @@
 
     "name": "MutAd",
     "version": "1.0",
-    "icon": "mute.png",
+    "icons": { 
+        "128": "MutAd.png"
+    },
     "content_scripts": [
         {
-            "matches": [ "*://*.com/*" ],
+            "matches": [ "*://*.youtube.com/*" ],
             "js": [ "mutAd.js" ]
         }
     ]
